@@ -4,6 +4,7 @@ Documentation: https://docs.google.com/document/d/1mmJWL3Jwanv7NcuTvLIkxiN7qyqg4
 
 Screencast: https://www.loom.com/share/1e081843a91543db8a2c01fac7b15a77?sid=86d695f6-656f-45c9-8495-13571f050e40
 
+>>>>>>> 68def482 (updated readme file)
 This repo contains :
 
 1.Created Terraform configuration files to set up the infrastructure on AWS. 2.Configured GitHub Actions workflows for CI/CD. 3.Added environment setup scripts to generate necessary environment variables for Strapi.
