@@ -1,0 +1,45 @@
+name: 'Terraform manual start'
+on:
+  workflow_dispatch:
+env:
+  TERRAFORM_VERSION: '1.8.5'
+jobs:
+  terraform:
+    environment: Somesh_DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.CSR_ACCESS_KEYS }}
+          aws-secret-access-key: ${{ secrets.CSR_SECRECT_ACCESS_KEYS }}
+          aws-region: ap-south-1
+          
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform format
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
