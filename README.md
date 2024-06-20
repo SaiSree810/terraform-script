@@ -1,11 +1,10 @@
 ﻿
 **Deploy Strapi on AWS EC2 using Terraform**
 
-## Author: Ravi Prakash Yadav
+## Author: Kiran Kumar Malik
 
-## ** GitHub Repo:  https://github.com/raviiai/Strapi-project-Deployment.git**
-## ** Loom Video Link: https://www.loom.com/share/088352b2e47f4a6897085a358a151365?sid=58c35501-ab0e-4387-bfde-9cd4f5dfdc88 **
-## ** Documentation Link:  https://docs.google.com/document/d/10iQqR07IvFKKRkBxopSP5BOfD5DO8hz32jE-PdfdmAA/edit?usp=sharing **
+## ** GitHub Repo:  https://github.com/KiranKumarMalik/Strapi-Application-Terraform
+## ** Loom Video Link: https://www.loom.com/share/404141105d2a4d849ceceaa97848c5e6?sid=31fa247c-d67e-42fe-99f2-825df1899318
 
 
 **Step1: Write Terraform Code**
@@ -42,61 +41,38 @@ Write all the code to deploy using terraform
 
    ##################################
 
-   resource "aws\_instance" "strapi\_instance" {
+   resource "aws_instance" "strapi_terraform_instance" {
+  ami           = var.ami
+  instance_type = "t2.small"
+  key_name      = aws_key_pair.strapi_keypair.key_name
+  security_groups = [aws_security_group.strapi_sg.name]
 
-   `  `ami           = var.ami
+  tags = {
+    Name = "Kiran-Strapi-Instance"
+  }
 
-   `  `instance\_type = "t2.medium"
+  provisioner "remote-exec" {
+  inline = [
+    "sudo apt-get update",
+    "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -",
+    "sudo apt-get install -y nodejs",
+    "sudo apt-get install -y npm",
+    "sudo npm install pm2 -g",
+    "if [ ! -d /srv/strapi ]; then sudo git clone https://github.com/raviiai/Strapi-project-Deployment /srv/strapi; else cd /srv/strapi && sudo git pull origin master; fi",
+    "sudo chmod u+x /srv/strapi/generate_env_variables.sh*",
+    "cd /srv/strapi",
+    "sudo ./generate_env_variables.sh",
+]
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = tls_private_key.strapi_key.private_key_pem
+      host        = self.public_ip
+    }
+  }
 
-   `  `key\_name      = aws\_key\_pair.strapi\_keypair.key\_name
+}
 
-   `  `security\_groups = [aws\_security\_group.strapi\_sg.name]
-
-   `  `tags = {
-
-   `    `Name = "Ravi-Strapi-Instance"
-
-   `  `}
-
-   `  `provisioner "remote-exec" {
-
-   `  `inline = [
-
-   `    `"sudo apt-get update",
-
-   `    `"curl -fsSL https://deb.nodesource.com/setup\_18.x | sudo -E bash -",
-
-   `    `"sudo apt-get install -y nodejs",
-
-   `    `"sudo apt-get install -y npm",
-
-   `    `"sudo npm install pm2 -g",
-
-   `    `"if [ ! -d /srv/strapi ]; then sudo git clone https://github.com/raviiai/Strapi-project-Deployment /srv/strapi; else cd /srv/strapi && sudo git pull origin master; fi",
-
-   `    `"sudo chmod u+x /srv/strapi/generate\_env\_variables.sh\*",
-
-   `    `"cd /srv/strapi",
-
-   `    `"sudo ./generate\_env\_variables.sh",
-
-   ]
-
-   `    `connection {
-
-   `      `type        = "ssh"
-
-   `      `user        = "ubuntu"
-
-   `      `private\_key = tls\_private\_key.strapi\_key.private\_key\_pem
-
-   `      `host        = self.public\_ip
-
-   `    `}
-
-   `  `}
-
-   }
 
    ##################################
 
@@ -157,16 +133,12 @@ Write all the code to deploy using terraform
 1. variable.tf
 
    variable "region" {
+  default = "ap-south-1"
+}
 
-   `  `default = "eu-west-2"
-
-   }
-
-   variable "ami" {
-
-   `  `default = "ami-053a617c6207ecc7b"
-
-   }
+variable "ami" {
+  default = "ami-05e00961530ae1b55"
+}
 
 1. providers.tf
 
@@ -192,11 +164,10 @@ Write all the code to deploy using terraform
 
 1. outputs.tf
 
-   output "instance\_ip" {
-
-   `  `value = aws\_instance.strapi\_instance.public\_ip
-
-   }
+   
+output "instance_ip" {
+  value = aws_instance.strapi_terraform_instance.public_ip
+}
 
 **Note: write a bash Script file to load and create env variable which is going to be used by the strapi application**
 
@@ -367,4 +338,4 @@ Fill all the details and click on lets’ start.
 
 Strapi is running succesfully on ec2 instance.
 
-## Author: Ravi Prakash Yadav
+## Author: Kiran Kumar Malik
