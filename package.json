@@ -1,14 +1,16 @@
 {
-  "name": "strapi-application",
+  "name": "strapi-app",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "strapi": "^3.6.8",
-    "pm2": "^5.1.0"
-  },
+  "description": "A Strapi application",
+  "main": "server.js",
   "scripts": {
-    "start": "strapi start"
-  }
+    "start": "node server.js",
+    "build": "echo 'No build step necessary' && exit 0",
+    "test": "echo 'No tests specified' && exit 0"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {}
 }
 
