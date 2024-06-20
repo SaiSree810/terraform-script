@@ -1,22 +1,24 @@
+resource "random_id" "this" {
+  byte_length = 8
+}
+
 resource "tls_private_key" "strapi_key" {
   algorithm = "RSA"
-  rsa_bits  = 4096
+  rsa_bits = 4096
 }
 
 resource "aws_key_pair" "strapi_keypair" {
-  key_name   = "strapi-keypair"
+  key_name   = "strapi-keypair-${random_id.this.hex}"
   public_key = tls_private_key.strapi_key.public_key_openssh
 }
 
 resource "aws_instance" "strapi_instance" {
   ami           = var.ami
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   key_name      = aws_key_pair.strapi_keypair.key_name
-
   security_groups = [aws_security_group.strapi_sg.name]
-
   tags = {
-    Name = "StrapiInstance"
+    Name = "StrapiInstance-${random_id.this.hex}"
   }
 
   provisioner "remote-exec" {
@@ -43,7 +45,7 @@ resource "aws_instance" "strapi_instance" {
 }
 
 resource "aws_security_group" "strapi_sg" {
-  name        = "strapi-security-group"
+  name        = "strapi-security-group-${random_id.this.hex}"
   description = "Security group for Strapi EC2 instance"
 
   ingress {
@@ -68,7 +70,7 @@ resource "aws_security_group" "strapi_sg" {
   }
 
   tags = {
-    Name = "Strapi Security Group"
+    Name = "Strapi Security Group-${random_id.this.hex}"
   }
 }
 
