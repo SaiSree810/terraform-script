@@ -1,0 +1,14 @@
+{
+  "name": "strapi-application",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "strapi": "^3.6.8",
+    "pm2": "^5.1.0"
+  },
+  "scripts": {
+    "start": "strapi start"
+  }
+}
+
