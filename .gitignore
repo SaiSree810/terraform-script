@@ -1,1 +1,3 @@
 svc/strapi/node_modules/
+.terraform/
+.terraform.lock.hcl
