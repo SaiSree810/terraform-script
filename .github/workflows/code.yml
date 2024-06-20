@@ -19,7 +19,9 @@ jobs:
           SAIPAVAN_EC2_HOST: ${{ secrets.SAIPAVAN_EC2_HOST }}
           SAIPAVAN_EC2_KEY: ${{ secrets.SAIPAVAN_EC2_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i $SAIPAVAN_EC2_KEY $EC2_USER@$SAIPAVAN_EC2_HOST "
+          echo "${SAIPAVAN_EC2_KEY}" > key.pem
+          chmod 600 key.pem
+          ssh -o StrictHostKeyChecking=no -i key.pem $EC2_USER@$SAIPAVAN_EC2_HOST "
             cd /srv/strapi
             git pull origin saipavan
             npm install
