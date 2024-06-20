@@ -3,6 +3,6 @@ variable "region" {
 }
 
 variable "ami" {
-  default = "ami-0c55b159cbfafe1f0"
+  default = "ami-0af02cff5770726ce"
 }
 
