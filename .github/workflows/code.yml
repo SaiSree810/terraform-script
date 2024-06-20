@@ -3,7 +3,7 @@ name: 'Code Workflow'
 on:
   push:
     branches:
-      - main
+      - saipavan
 
 jobs:
   deploy:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Deploy Strapi
         env:
@@ -21,7 +21,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i $SAIPAVAN_EC2_KEY $EC2_USER@$SAIPAVAN_EC2_HOST "
             cd /srv/strapi
-            git pull origin main
+            git pull origin saipavan
             npm install
             pm2 restart strapi
           "
