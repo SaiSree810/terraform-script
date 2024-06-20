@@ -1,0 +1,17 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log
+crash.*
+override.tf
+override.tf.json
+terraform.rc
+terraform.d/
+
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
