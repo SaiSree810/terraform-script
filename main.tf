@@ -6,7 +6,6 @@ resource "aws_instance" "strapi" {
     tags = {
         Name = "Strapi-Instance"
      }
-
   
 provisioner "remote-exec" {
     inline = [
