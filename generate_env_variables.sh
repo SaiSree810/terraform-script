@@ -7,11 +7,6 @@ ADMIN_JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(16).toStri
 
 TRANSFER_TOKEN_SALT=$(node -e "console.log(require('crypto').randomBytes(16).toString('base64'))")
 
-# Define your AWS credentials
-AWS_ACCESS_KEY_ID="AKIAXYKJQKV6ZLBDHY44"
-AWS_SECRET_ACCESS_KEY="0dhvdBDTQSnc1Z2mOAGiFhEsPZwMxs7g7Pg4vRTV"
-AWS_DEFAULT_REGION="eu-west-2"
-
 # Export variables
 export APP_KEYS
 export API_TOKEN_SALT
