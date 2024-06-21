@@ -1,1 +1,33 @@
+name: Deploy Strapi
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-strapi:
+    name: 'Deploy Strapi'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install Dependencies
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@$(cat ./terraform/instance_ip.txt) 'sudo apt-get update -y && sudo apt-get install -y sshpass'
+
+      - name: Clone Strapi Repository
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@$(cat ./terraform/instance_ip.txt) 'git clone https://github.com/PearlThoughts-DevOps-Internship/strapi /srv/strapi'
+
+      - name: Install Strapi Dependencies and Start PM2 Process
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@$(cat ./terraform/instance_ip.txt) 'cd /srv/strapi && npm install && pm2 start npm --name "strapi" -- start'
 
