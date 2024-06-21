@@ -9,6 +9,7 @@ terraform {
 
 provider "aws" {
   region = var.region
+  profile = "default"
 }
 
 resource "tls_private_key" "strapi_ec2" {
