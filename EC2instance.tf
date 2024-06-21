@@ -31,7 +31,8 @@ resource "aws_instance" "ec2-node-server" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = file("/home/somesh/Desktop/AWS_IAC/nestjsserver.pem") # Replace with your private key path
+      #private_key = file("/home/somesh/Desktop/AWS_IAC/nestjsserver.pem") # Replace with your private key path
+      private_key = var.ssh_private_key
       host        = self.public_ip
       #private_key = aws_key_pair.deployer.id
 
