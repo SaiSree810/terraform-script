@@ -1,6 +1,10 @@
 name: Build and Restart the PM2 Strapi process
 
 on:
+  workflow_run:
+    workflows: ["Terraform manual start"]
+    types:
+      - completed
   push:
     branches: [ "somesh" ]
   pull_request:
