@@ -26,9 +26,9 @@ jobs:
         working-directory: srv/strapi
 
       - name: Store Instance IP 
-        run: echo $(terraform output instance_ip) > ./instance_ip.txt
+        run: echo $(terraform output instance_ip) > srv/strapi/instance_ip.txt
         working-directory: srv/trapi
 
       - name: Display Instance IP
-        run: cat ./terraform/instance_ip.txt
+        run: cat srv/strapi/instance_ip.txt
 
