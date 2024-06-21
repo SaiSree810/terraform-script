@@ -3,6 +3,10 @@ name: Terraform Deployment
 on:
   workflow_dispatch:
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.KARTIK_BAWANE_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.KARTIK_BAWANE_SECRET_KEY }}  
+
 jobs:
   terraform:
     name: 'Terraform Apply'
