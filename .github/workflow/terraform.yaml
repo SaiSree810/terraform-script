@@ -1,0 +1,39 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches: ["RaviPrakash"]
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.1.0  
+        aws_access_key_id: ${{ secrets.RAVI_AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.RAVI_AWS_SECRET_ACCESS_KEY }}
+        region: ${{ secrets.RAVI_AWS_REGION }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+        run: terraform plan -out=tfplan -var="ec2_private_key=${{ secrets.RAVI_SSH_PRIVATE_KEY }}"
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
