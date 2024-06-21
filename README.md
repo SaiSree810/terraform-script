@@ -236,3 +236,5 @@ This repository contains the setup for deploying a Strapi application on AWS EC2
 This README provides an overview of the setup and deployment process for the Strapi application using Terraform and GitHub Actions. Follow the steps provided to replicate the setup in your environment.
 
 
+## Test Deployment
+This is a test change to verify the CI/CD pipeline.
