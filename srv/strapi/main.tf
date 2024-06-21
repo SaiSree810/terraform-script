@@ -17,7 +17,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "web" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  key_name = "key1"
+  key_name = "key12"
   subnet_id = aws_subnet.strapi-subnet.id
   security_groups = [ aws_security_group.top_sec.id ]
   associate_public_ip_address = true
