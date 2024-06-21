@@ -1,7 +1,7 @@
 ﻿
 **Deploy Strapi on AWS EC2 using Terraform**
 
-## Author: Ravi Prakash Yadav
+### Author: Ravi Prakash Yadav
 
 ## ** GitHub Repo:  https://github.com/raviiai/Strapi-project-Deployment.git**
 ## ** Loom Video Link: https://www.loom.com/share/088352b2e47f4a6897085a358a151365?sid=58c35501-ab0e-4387-bfde-9cd4f5dfdc88 **
