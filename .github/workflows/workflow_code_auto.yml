@@ -1,0 +1,40 @@
+name: Build and Restart the PM2 Strapi process
+
+on:
+  push:
+    branches: [ "somesh" ]
+  pull_request:
+    branches: [ "somesh" ]
+
+jobs:
+  deploy:
+    environment: DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Prepare SSH Key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+
+      - name: Restart server
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+
+          #In an automated environment, if there are any conflicts during the merge, the process would fail. 
+          #That's why I am using fetch and reset combo, pull is essentially a git fetch followed by a git merge.
+        
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ${USERNAME}@${HOST} '
+            cd ~/my-strapi-project &&
+            git fetch origin &&  
+            git reset --hard origin/somesh && 
+            yarn install &&
+            yarn build &&
+            pm2 restart strapi-app || pm2 start npm --name strapi-app -- run develop
+          '
