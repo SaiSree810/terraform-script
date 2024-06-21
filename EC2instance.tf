@@ -23,7 +23,6 @@ resource "aws_instance" "ec2-node-server" {
       "yes | npx create-strapi-app@latest my-strapi-project --quickstart --skip-cloud --no-run ", #if running --skip-cloud to skip loginsuff
       "cd ~/my-strapi-project",
       "pm2 start npm --name strapi-app -- run develop",
-      "pm2 startup",
       "pm2 save"
 
     ]
