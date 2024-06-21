@@ -38,3 +38,4 @@ jobs:
             yarn build &&
             pm2 restart strapi-app || pm2 start npm --name strapi-app -- run develop
           '
+          
