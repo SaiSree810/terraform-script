@@ -1,1 +1,34 @@
+name: Terraform Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: srv/strapi
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: srv/strapi
+
+      - name: Store Instance IP
+        run: echo $(terraform output instance_ip) > ./instance_ip.txt
+        working-directory: srv/trapi
+
+      - name: Display Instance IP
+        run: cat ./terraform/instance_ip.txt
 
