@@ -28,7 +28,7 @@ jobs:
         working-directory: srv/strapi
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform destroy -auto-approve
         working-directory: srv/strapi
 
       - name: Store Instance IP 
