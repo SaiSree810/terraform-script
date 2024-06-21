@@ -36,6 +36,6 @@ jobs:
             git reset --hard origin/somesh && 
             yarn install &&
             yarn build &&
-            pm2 restart strapi-app || pm2 start npm --name strapi-app -- run develop
+            pm2 restart strapi-app 
           '
           
