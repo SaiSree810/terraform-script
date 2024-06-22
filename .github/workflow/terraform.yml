@@ -1,8 +1,7 @@
 name: Terraform Apply
 
 on:
-  workflow_dispatch: # Manually triggered workflow
-
+  push: ["main", "Adam"]
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
