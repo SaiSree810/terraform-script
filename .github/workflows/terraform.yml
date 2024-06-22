@@ -28,6 +28,5 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init 
-    - name: Run Terraform Action
-      id: terraform
+   
       
