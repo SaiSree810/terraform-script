@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main, Adam ] # Trigger on push to master and your branch
+    branches: "Adam" # Trigger on push to master and your branch
 
 jobs:
   deploy:
