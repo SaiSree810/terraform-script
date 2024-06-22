@@ -1,8 +1,9 @@
 name: Terraform
 
 on:
-  workflow_dispatch: # Manual trigger
-
+  push:
+    branches: [ main, Adam ] # Trigger on push to main and Adam branches
+  
 jobs:
   terraform:
     runs-on: ubuntu-latest
