@@ -1,0 +1,21 @@
+# .gitignore in the root directory
+
+# Ignore Terraform state files
+Terraform/*.tfstate
+Terraform/*.tfstate.backup
+
+# Ignore Terraform crash logs
+Terraform/crash.log
+
+# Ignore Terraform variables files
+Terraform/variables.tfvars
+
+# Ignore other sensitive files
+Terraform/secrets.tfvars
+
+# Ignore temporary files
+Terraform/*.log
+Terraform/*.tmp
+
+# Ignore directory for Terraform configurations
+Terraform/.terraform/
