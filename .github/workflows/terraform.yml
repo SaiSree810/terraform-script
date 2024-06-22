@@ -1,5 +1,4 @@
-name: Apply or Destroy Strapi with Terraform
-
+name: terraform 
 on:
   workflow_dispatch:
     inputs:
@@ -7,10 +6,7 @@ on:
         description: 'Choose action'
         required: true
         default: 'apply'
-        type: choice
-        options:
-          - apply
-          - destroy
+  
 
 jobs:
   terraform:
@@ -34,10 +30,4 @@ jobs:
       run: terraform init 
     - name: Run Terraform Action
       id: terraform
-      run: |
-        if [ "${{ github.event.inputs.action }}" == "apply" ]; then
-          terraform apply -auto-approve
-        elif [ "${{ github.event.inputs.action }}" == "destroy" ]; then
-          terraform destroy -auto-approve
-        fi
-      working-directory: ./Terraform
+      
