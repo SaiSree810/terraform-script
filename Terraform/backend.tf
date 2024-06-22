@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "pramod858tf"
-    key    = "path/to/my/key"
+    key    = "Strapi/terraform.tfstate"
     region = "us-east-1"
   }
 }
