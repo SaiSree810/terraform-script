@@ -16,5 +16,5 @@ jobs:
 
       - name: Sync Repository
         run: |
-          ssh -i /path/to/your-key-pair.pem ec2-user@your-ec2-public-dns "cd /srv/strapi && git pull origin main && npm install && pm2 restart all"
+          ssh -i /path/to/${{secrets.SSH_PRIVATE_KEY}} ubuntu@ec2-13-232-176-224.ap-south-1.compute.amazonaws.com "cd /srv/strapi && git pull origin main && npm install && pm2 restart all"
 
