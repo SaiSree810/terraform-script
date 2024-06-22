@@ -24,12 +24,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.MAHESHR_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Add SSH key to agent
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.MAHESHR_PRIVATE_KEY }}     
+          chmod 600 ~/.ssh/id_rsa   
 
       - name:  Setting up the terraform
         uses: hashicorp/terraform-github-actions/init@v0.4.0
