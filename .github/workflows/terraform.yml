@@ -31,9 +31,7 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Initialize Terraform
-      run: terraform init -input=false
-      working-directory: ./Terraform
-
+      run: terraform init 
     - name: Run Terraform Action
       id: terraform
       run: |
