@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     
     steps:
-      - name: Checkout code
+      - name: Checkout the code
         uses: actions/checkout@v4
         
       - name: Setting up AWS credentials
@@ -26,7 +26,7 @@ jobs:
           echo "${{ secrets.MAHESHR_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Add SSH key to the agent
+      - name: Add SSH key to agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.MAHESHR_PRIVATE_KEY }}     
