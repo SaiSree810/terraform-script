@@ -35,7 +35,7 @@ resource "aws_instance" "web" {
     instance_type   = var.instance_type
     security_groups = [aws_security_group.Strapi_SG.name]
     key_name        = var.key_pair
-    # user_data       = file("Strapi.sh")
+    user_data     = file("Strapi.sh")
     
     root_block_device {
         volume_size = 15
