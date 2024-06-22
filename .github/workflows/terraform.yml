@@ -3,7 +3,6 @@ name: Terraform
 on:
   push:
     branches: [ main, Adam ] # Trigger on push to main and Adam branches
-  workflow_dispatch: # Allow manual trigger
   
 jobs:
   terraform:
