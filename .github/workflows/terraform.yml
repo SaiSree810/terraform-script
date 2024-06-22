@@ -1,23 +1,46 @@
-name: Terraform
+name: Apply or Destroy Strapi with Terraform
 
 on:
-  push:
-    branches: [ main, Adam ] # Trigger on push to main and Adam branches
-  
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Choose action'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - destroy
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Init
-        run: terraform init
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+    - name: Initialize Terraform
+      run: terraform init -input=false
+      working-directory: ./Terraform
 
+    - name: Run Terraform Action
+      id: terraform
+      run: |
+        if [ "${{ github.event.inputs.action }}" == "apply" ]; then
+          terraform apply -auto-approve
+        elif [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+          terraform destroy -auto-approve
+        fi
+      working-directory: ./Terraform
+Merge pull request #15 from PearlThoughts-DevOps-Internship/pramod · PearlThoughts-DevOps-Internship/strapi@5d6e250
