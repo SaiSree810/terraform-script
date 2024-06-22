@@ -18,7 +18,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          mkdir -p ~/.ssh
-          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          sudo mkdir -p ~/.ssh
+          sudo echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ec2-13-232-176-224.ap-south-1.compute.amazonaws.com >> ~/.ssh/
+          sudo ssh-keyscan -H ec2-13-232-176-224.ap-south-1.compute.amazonaws.com >> ~/.ssh/
