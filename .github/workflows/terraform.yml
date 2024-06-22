@@ -3,7 +3,6 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: 'Choose action'
         required: true
         default: 'apply'
   
@@ -28,5 +27,8 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init 
-   
+    - name: Plan terraform
+      run : terraform plan
+    - name : Apply terraform
+      run : terraform run
       
