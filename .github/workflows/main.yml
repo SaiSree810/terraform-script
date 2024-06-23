@@ -1,15 +1,15 @@
-name: Terraform Apply
+name: Terraform Output
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy staging'
+        description: 'Environment to display output'
         required: true
         default: 'staging'
 
 jobs:
-  terraform_apply:
+  terraform_output:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,24 +18,19 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: '1.0.0'
+          terraform_version: '1.8.5'
 
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Apply
+      - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ShaikgayasAWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ShaikgayasAWS_SECRET_ACCESS_KEY }}
         run: |
-          terraform validate
-          terraform apply -auto-approve
+          terraform init
+
+      - name: Terraform Output
+        run: |
           terraform output public_ip_address > public_ip.txt  # Output public IP to a file
 
       - name: Show Public IP
         run: |
           cat public_ip.txt  # Display the public IP in the workflow log
-
-
-      - name: Save Terraform state
-        if: success()
-        run: |
-          mkdir -p ${{ secrets.TF_STATE_DIR }}
-          mv terraform.tfstate ${{ secrets.TF_STATE_DIR }}/terraform.tfstate

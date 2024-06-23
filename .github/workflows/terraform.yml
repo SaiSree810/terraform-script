@@ -6,7 +6,7 @@ on:
       environment:
         description: 'Environment to deploy staging'
         required: true
-        default: 'staging' 
+        default: 'staging'
 
 jobs:
   terraform_apply:
