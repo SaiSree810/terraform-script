@@ -1,15 +1,12 @@
-name: Terraform Output
+name: Terraform Apply
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to display output'
-        required: true
-        default: 'staging'
+  push:
+    branches:
+      - Shaikgayas
 
 jobs:
-  terraform_output:
+  terraform_apply:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,13 +18,30 @@ jobs:
           terraform_version: '1.8.5'
 
       - name: Configure AWS credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.SHAIKGAYASAWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.SHAIKGAYASAWS_SECRET_ACCESS_KEY }}
         run: |
-          terraform init
-          terraform output public_ip_address > public_ip.txt  # Output public IP to a file
+          aws configure set aws_access_key_id ${{ secrets.SHAIKGAYASAWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.SHAIKGAYASAWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ap-south-1
+          aws configure set default.output json
 
-      - name: Show Public IP
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Apply
         run: |
-          cat public_ip.txt  # Display the public IP in the workflow log
+          terraform apply -auto-approve
+
+      - name: Save Terraform state
+        if: success()
+        run: |
+          STATE_DIR="${GITHUB_WORKSPACE}/terraform"
+          if [ ! -d "$STATE_DIR" ]; then
+            mkdir -p "$STATE_DIR"
+          fi
+          mv terraform.tfstate* "$STATE_DIR/"
+        shell: bash
+        env:
+          TERRAFORM_CLI_PATH: /home/runner/work/_temp/876b3ddb-b8a6-42c9-9b19-ef8c6601fccf
