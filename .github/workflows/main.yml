@@ -29,7 +29,7 @@ jobs:
 
       - name: Terraform Output
         run: |
-          terraform output public_ip_address > public_ip.txt  # Output public IP to a file
+          terraform output public_ip_address > public_ip.txt
 
       - name: Show Public IP
         run: |
