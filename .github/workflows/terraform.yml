@@ -1,12 +1,15 @@
-name: Terraform Apply
+name: Terraform Output
 
 on:
-  push:
-    branches:
-      - Shaikgayas
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to display output'
+        required: true
+        default: 'staging'
 
 jobs:
-  terraform_apply:
+  terraform_output:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,11 +26,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SHAIKGAYASAWS_SECRET_ACCESS_KEY }}
         run: |
           terraform init
-          terraform validate
-          terraform apply -auto-approve
+          terraform output public_ip_address > public_ip.txt  # Output public IP to a file
 
-      - name: Save Terraform state
-        if: success()
+      - name: Show Public IP
         run: |
-          mkdir -p ${{ secrets.TF_STATE_DIR }}
-          mv terraform.tfstate ${{ secrets.TF_STATE_DIR }}/terraform.tfstate
+          cat public_ip.txt  # Display the public IP in the workflow log
