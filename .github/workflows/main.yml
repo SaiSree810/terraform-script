@@ -17,12 +17,11 @@ jobs:
         with:
           terraform_version: '1.8.5'
 
-      - name: Configure AWS credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.SHAIKGAYASAWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.SHAIKGAYASAWS_SECRET_ACCESS_KEY }}
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
         run: |
-          terraform init
           terraform validate
           terraform apply -auto-approve
 
@@ -32,3 +31,6 @@ jobs:
           STATE_DIR="${{ secrets.TF_STATE_DIR }}/terraform.tfstate"
           mkdir -p "$(dirname "$STATE_DIR")"
           mv terraform.tfstate "$STATE_DIR"
+        shell: bash
+        env:
+          TERRAFORM_CLI_PATH: /home/runner/work/_temp/9e78564e-7073-4079-b117-c030bbab8522
