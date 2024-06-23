@@ -23,10 +23,11 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      - name: Terraform Validate
+        run: terraform validate
+
       - name: Terraform Apply
-        run: |
-          terraform validate
-          terraform apply -auto-approve
+        run: terraform apply -auto-approve
 
       - name: Save Terraform state
         if: success()
