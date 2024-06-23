@@ -1,0 +1,58 @@
+name: Strapi Deployment
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x  # Or your desired Node.js version
+
+      - name: Install dependencies
+        run: npm ci  # Or yarn install
+
+      - name: Build Strapi app
+        run: npm run build  # Or yarn build
+
+      - name: Create tarball
+        run: tar -czf my-strapi-project.tgz -C ./build .
+
+      - name: Deploy to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: "my-strapi-project.tgz"
+          target: "/tmp"
+
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            # Load nvm
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
+
+            nvm install 18 
+            nvm use 18
+            cd /home/ubuntu/my-strapi-project/
+            sudo git pull
+            cd /srv/strapi/build
+            sudo rm -rf ./*
+            sudo tar -xzf /tmp/my-strapi-project.tgz  # Extract the uploaded tarball
+            sudo npm ci  # Or yarn install (if needed on the server)
+            sudo pm2 restart strapi-app || sudo pm2 start npm --name "strapi-app" -- run start  # Restart or start the app
