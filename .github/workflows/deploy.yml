@@ -2,7 +2,7 @@ name: Strapi Deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
