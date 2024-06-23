@@ -1,0 +1,39 @@
+name: Deploy Strapi with PM2
+
+on:
+  push:
+    branches:
+      - main  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install PM2
+        run: npm install pm2 -g
+
+      - name: Install Strapi dependencies
+        run: npm install
+        working-directory: /srv/strapi  
+
+      - name: Build Strapi application
+        run: npm run build
+        working-directory: /srv/strapi 
+
+      - name: Start Strapi with PM2
+        run: pm2 start npm --name "strapi" -- start
+        working-directory: /srv/strapi
+
+      - name: Save PM2 Process List
+        run: pm2 save
+
+      - name: Reload PM2 Process
+        run: pm2 reload strapi
