@@ -11,7 +11,7 @@ sudo chmod -R 755 /home/ubuntu/srv/strapi
 cd /home/ubuntu/srv/strapi
 git config --global user.name "leticia2983"
 git config --global user.email "leticia888444@gmail.com"
-git clone https://github.com/leticia2983/Strapi_app_terraform.git .
+git clone https://github.com/PearlThoughts-DevOps-Internship/strapi.git
 
 cat <<EOT > .env
 HOST=0.0.0.0

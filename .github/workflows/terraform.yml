@@ -1,8 +1,9 @@
-on:
+name: Terraform deploy ec2
 
+on:
   push:
     branches:
-      - main
+      - main  # Trigger on push to the main branch, adjust as needed
 jobs:
   terraform:
     runs-on: ubuntu-latest
