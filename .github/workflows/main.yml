@@ -37,7 +37,7 @@ jobs:
       - name: Save Terraform state
         if: success()
         run: |
-          STATE_DIR="${{ secrets.TF_STATE_DIR }}/terraform"
+          STATE_DIR="${GITHUB_WORKSPACE}/terraform"
           mkdir -p "$STATE_DIR"
           mv terraform.tfstate* "$STATE_DIR/"
         shell: bash
