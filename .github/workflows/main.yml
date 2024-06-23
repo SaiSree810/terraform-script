@@ -1,9 +1,9 @@
-#name: Deploy Strapi to EC2
-#
-#on:
-#  push:
-#    branches:
-#      - main  # Trigger on push to the main branch, adjust as needed
+name: Deploy Strapi to EC2
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch, adjust as needed
 
 jobs:
   deploy:
@@ -23,7 +23,7 @@ jobs:
           KEY_PATH: ${{ secrets.KEY_PATH }}
         run: |
           echo "${{ secrets.KEY_PATH }}" > key.pem
-          chmod 400 key.pem
+          chmod 600 key.pem
 
       - name: SSH and Deploy Strapi
         env:
@@ -33,10 +33,13 @@ jobs:
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
           sudo chmod -R 755 /home/ubuntu/srv/strapi
-          cd home/ubuntu/srv/strapi
-          git pull
+          cd /home/ubuntu/srv/strapi
           pwd
-          pm2 restart strapi
+          git pull
+          yarn install
+          yarn build
+          pm2 start npm --name "strapi" -- run start
+          pm2 save
           EOF
 
 
