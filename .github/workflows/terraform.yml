@@ -15,13 +15,14 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: '1.8.5' 
+          terraform_version: '1.8.5'
 
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Apply
+      - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SHAIKGAYASAWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SHAIKGAYASAWS_SECRET_ACCESS_KEY }}
         run: |
+          terraform init
           terraform validate
           terraform apply -auto-approve
 
