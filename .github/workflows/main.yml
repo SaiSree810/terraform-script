@@ -1,39 +1,43 @@
-name: Deploy Strapi with PM2
+name: Terraform Apply
 
 on:
-  push:
-    branches:
-      - main  
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy staging'
+        required: true
+        default: 'staging'
 
+jobs:
+  terraform_apply:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
         with:
-          node-version: '14'
+          terraform_version: '1.0.0'
 
-      - name: Install PM2
-        run: npm install pm2 -g
+      - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ShaikgayasAWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ShaikgayasAWS_SECRET_ACCESS_KEY }}
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> $GITHUB_ENV
 
-      - name: Install Strapi dependencies
-        run: npm install
-        working-directory: /srv/strapi  
+      - name: Terraform Init
+        run: terraform init
 
-      - name: Build Strapi application
-        run: npm run build
-        working-directory: /srv/strapi 
+      - name: Terraform Apply
+        run: |
+          terraform validate
+          terraform apply -auto-approve
 
-      - name: Start Strapi with PM2
-        run: pm2 start npm --name "strapi" -- start
-        working-directory: /srv/strapi
-
-      - name: Save PM2 Process List
-        run: pm2 save
-
-      - name: Reload PM2 Process
-        run: pm2 reload strapi
+      - name: Save Terraform state
+        if: success()
+        run: |
+          mkdir -p ${{ secrets.TF_STATE_DIR }}
+          mv terraform.tfstate ${{ secrets.TF_STATE_DIR }}/terraform.tfstate
