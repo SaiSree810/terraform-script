@@ -9,9 +9,9 @@ sudo mkdir -p /home/ubuntu/srv/strapi
 sudo chown -R ubuntu:ubuntu /home/ubuntu/srv/strapi
 sudo chmod -R 755 /home/ubuntu/srv/strapi
 cd /home/ubuntu/srv/strapi
-git config --global user.name "leticia2983"
+git config --global user.name "leticia"
 git config --global user.email "leticia888444@gmail.com"
-git clone https://github.com/leticia2983/Strapi_app_terraform.git .
+git clone https://github.com/PearlThoughts-DevOps-Internship/strapi.git
 npm install
 npm run build
 pm2 start npm --name "strapi" -- run start
