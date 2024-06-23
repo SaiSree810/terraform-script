@@ -31,9 +31,9 @@ jobs:
       - name: Save Terraform state
         if: success()
         run: |
-          STATE_DIR="${{ secrets.TF_STATE_DIR }}/terraform.tfstate"
-          mkdir -p "$(dirname "$STATE_DIR")"
-          mv terraform.tfstate "$STATE_DIR"
+          STATE_DIR="${{ secrets.TF_STATE_DIR }}"
+          mkdir -p "$STATE_DIR"
+          mv terraform.tfstate* "$STATE_DIR/"
         shell: bash
         env:
           TERRAFORM_CLI_PATH: /home/runner/work/_temp/9e78564e-7073-4079-b117-c030bbab8522
