@@ -20,14 +20,6 @@ jobs:
         with:
           terraform_version: '1.0.0'
 
-      - name: Configure AWS credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.ShaikgayasAWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.ShaikgayasAWS_SECRET_ACCESS_KEY }}
-        run: |
-          echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> $GITHUB_ENV
-
       - name: Terraform Init
         run: terraform init
 
@@ -35,6 +27,12 @@ jobs:
         run: |
           terraform validate
           terraform apply -auto-approve
+          terraform output public_ip_address > public_ip.txt  # Output public IP to a file
+
+      - name: Show Public IP
+        run: |
+          cat public_ip.txt  # Display the public IP in the workflow log
+
 
       - name: Save Terraform state
         if: success()
